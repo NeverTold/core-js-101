@@ -194,7 +194,7 @@ function findFirstSingleChar(str) {
   let char;
   let strin = str;
   while (strin.length) {
-    char = strin[0];
+    char = strin.slice(0, 1);
     const reg = new RegExp(char, 'g');
     if (strin.match(reg).length === 1) {
       return char;

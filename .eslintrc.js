@@ -16,6 +16,5 @@ module.exports = {
     ecmaVersion: 2018,
   },
   rules: {
-	"prefer-destructuring": ["error", {"object": true, "array": false}]
   },
 };
