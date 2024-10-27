@@ -133,8 +133,14 @@ function isTriangle(a, b, c) {
  *   { top:20, left:20, width: 20, height: 20 }    =>  false
  *
  */
-function doRectanglesOverlap(/* rect1, rect2 */) {
-  throw new Error('Not implemented');
+function doRectanglesOverlap(rect1, rect2) {
+  const r1 = rect1;
+  const r2 = rect2;
+  r1.rightBot = r1.top + r1.height;
+  r2.rightBot = r2.top + r2.height;
+  r1.len = r1.left + r1.width;
+  r2.len = r2.left + r2.width;
+  return r1.left < r2.len && r1.len > r2.left && r1.top < r2.rightBot && r1.rightBot > r2.top;
 }
 
 
@@ -164,8 +170,12 @@ function doRectanglesOverlap(/* rect1, rect2 */) {
  *   { center: { x:0, y:0 }, radius:10 },  { x:10, y:10 }   => false
  *
  */
-function isInsideCircle(/* circle, point */) {
-  throw new Error('Not implemented');
+function isInsideCircle(circle, point) {
+  const ciX = circle.center.x;
+  const ciY = circle.center.y;
+  const powX = (point.x - ciX) ** 2;
+  const powY = (point.y - ciY) ** 2;
+  return powX + powY < circle.radius ** 2;
 }
 
 
@@ -180,8 +190,18 @@ function isInsideCircle(/* circle, point */) {
  *   'abracadabra'  => 'c'
  *   'entente' => null
  */
-function findFirstSingleChar(/* str */) {
-  throw new Error('Not implemented');
+function findFirstSingleChar(str) {
+  let char;
+  let strin = str;
+  while (strin.length) {
+    char = strin[0];
+    const reg = new RegExp(char, 'g');
+    if (strin.match(reg).length === 1) {
+      return char;
+    }
+    strin = strin.replace(new RegExp(char, 'g'), '');
+  }
+  return null;
 }
 
 
@@ -207,8 +227,25 @@ function findFirstSingleChar(/* str */) {
  *   5, 3, true, true   => '[3, 5]'
  *
  */
-function getIntervalString(/* a, b, isStartIncluded, isEndIncluded */) {
-  throw new Error('Not implemented');
+function getIntervalString(a, b, isStartIncluded, isEndIncluded) {
+  let str;
+  let arr = [];
+  if (a - b >= 0) {
+    arr = [b, a];
+    str = arr.join(', ');
+  } if (a - b < 0) {
+    arr = [a, b];
+    str = arr.join(', ');
+  }
+  if (isStartIncluded && isEndIncluded) {
+    return `[${str}]`;
+  } if (isStartIncluded && !isEndIncluded) {
+    return `[${str})`;
+  } if (!isStartIncluded && !isEndIncluded) {
+    return `(${str})`;
+  } if (!isStartIncluded && isEndIncluded) {
+    return `(${str}]`;
+  } return null;
 }
 
 
@@ -224,8 +261,10 @@ function getIntervalString(/* a, b, isStartIncluded, isEndIncluded */) {
  * 'rotator' => 'rotator'
  * 'noon' => 'noon'
  */
-function reverseString(/* str */) {
-  throw new Error('Not implemented');
+function reverseString(str) {
+  let arr = str.split('');
+  arr = arr.reverse();
+  return arr.join('');
 }
 
 
@@ -241,8 +280,10 @@ function reverseString(/* str */) {
  *   87354 => 45378
  *   34143 => 34143
  */
-function reverseInteger(/* num */) {
-  throw new Error('Not implemented');
+function reverseInteger(num) {
+  let arr = String(num).split('');
+  arr = arr.reverse();
+  return Number(arr.join(''));
 }
 
 
@@ -266,8 +307,21 @@ function reverseInteger(/* num */) {
  *   5436468789016589 => false
  *   4916123456789012 => false
  */
-function isCreditCardNumber(/* ccn */) {
-  throw new Error('Not implemented');
+function isCreditCardNumber(ccn) {
+  const ccnS = ccn.toString();
+  let sum = 0;
+  const parity = (ccnS.length) % 2;
+  for (let i = 0; i < ccnS.length; i += 1) {
+    let digit = Number(ccnS[i]);
+    if (i % 2 === parity) {
+      digit *= 2;
+      if (digit > 9) {
+        digit -= 9;
+      }
+    }
+    sum += digit;
+  }
+  return Number(sum % 10) === 0;
 }
 
 /**
@@ -284,8 +338,19 @@ function isCreditCardNumber(/* ccn */) {
  *   10000 ( 1+0+0+0+0 = 1 ) => 1
  *   165536 (1+6+5+5+3+6 = 26,  2+6 = 8) => 8
  */
-function getDigitalRoot(/* num */) {
-  throw new Error('Not implemented');
+function getDigitalRoot(num) {
+  let arr = String(num).split('');
+  arr = arr.map((el) => el * 1);
+  let number;
+  while (arr.length > 1) {
+    number = arr.reduce((acc, value) => acc + value);
+    if (String(number).length === 1) {
+      return number;
+    }
+    arr = String(number).split('');
+    arr = arr.map((el) => el * 1);
+  }
+  return number;
 }
 
 
